@@ -6,27 +6,41 @@ public class MyInputField : InputField
 {
     #region Variables
     private bool m_IsDragging = false;
-    private int m_DragStartPosition;
+    private int m_DragStartCaretCaretPosition;
+    #endregion
+    
+    #region Properties
+    public bool IsDragging
+    {
+        get => m_IsDragging;
+        set => m_IsDragging = value;
+    }
+    
+    public int DragStartCaretPosition
+    {
+        get => m_DragStartCaretCaretPosition;
+        set => m_DragStartCaretCaretPosition = value;
+    }
     #endregion
     
     #region Unity Methods
     public override void OnBeginDrag(PointerEventData eventData)
     {
         base.OnBeginDrag(eventData);
-        m_IsDragging = true;
-        m_DragStartPosition = caretPosition;
+        IsDragging = true;
+        DragStartCaretPosition = caretPosition;
     }
     
     public override void OnEndDrag(PointerEventData eventData)
     {
         base.OnEndDrag(eventData);
-        m_IsDragging = false;
+        IsDragging = false;
     }
 
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerDown(eventData);
-        m_DragStartPosition = caretPosition;
+        DragStartCaretPosition = caretPosition;
     }
 
     public override void OnDeselect(BaseEventData eventData)
@@ -45,10 +59,10 @@ public class MyInputField : InputField
     {
         int insertPos = caretPosition;
         
-        if (caretPosition != m_DragStartPosition)
+        if (caretPosition != DragStartCaretPosition)
         {
-            int startPos = Mathf.Min(caretPosition, m_DragStartPosition);
-            int endPos = Mathf.Max(caretPosition, m_DragStartPosition);
+            int startPos = Mathf.Min(caretPosition, DragStartCaretPosition);
+            int endPos = Mathf.Max(caretPosition, DragStartCaretPosition);
             
             string beforeText = text.Substring(0, startPos);
             string afterText = text.Substring(endPos);
@@ -69,10 +83,10 @@ public class MyInputField : InputField
     
     public void DeleteCharacter()
     {
-        if (caretPosition != m_DragStartPosition)
+        if (caretPosition != m_DragStartCaretCaretPosition)
         {
-            int startPos = Mathf.Min(caretPosition, m_DragStartPosition);
-            int endPos = Mathf.Max(caretPosition, m_DragStartPosition);
+            int startPos = Mathf.Min(caretPosition, DragStartCaretPosition);
+            int endPos = Mathf.Max(caretPosition, DragStartCaretPosition);
             
             string beforeText = text.Substring(0, startPos);
             string afterText = text.Substring(endPos);
@@ -121,8 +135,7 @@ public class MyInputField : InputField
     private void ForceCaretPosition(int newPosition)
     {
         caretPosition = newPosition;
-        caretSelectPositionInternal = caretPosition;
-        m_DragStartPosition = caretPosition;
+        DragStartCaretPosition = caretPosition;
         
         UpdateLabel();
     }

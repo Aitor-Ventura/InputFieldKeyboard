@@ -12,6 +12,7 @@ public class VirtualKeyboard : MonoBehaviour
         Backspace
     }
     
+    #region Variables
     public MyInputField InputField;
     
     [Tooltip("How long to wait before repeating a key press.")]
@@ -20,7 +21,9 @@ public class VirtualKeyboard : MonoBehaviour
     private KeyType m_HeldKey = KeyType.None;
     private string m_HeldCharacter = "";
     private float m_HoldTimer = 0.0f;
+    #endregion
     
+    #region Properties
     public KeyType HeldKey
     {
         get => m_HeldKey;
@@ -44,7 +47,9 @@ public class VirtualKeyboard : MonoBehaviour
         get => m_KeyRepeatDelay;
         set => m_KeyRepeatDelay = value;
     }
-
+    #endregion
+    
+    #region Unity Methods
     private void Update()
     {
         if (HeldKey == KeyType.None) return;
@@ -70,7 +75,20 @@ public class VirtualKeyboard : MonoBehaviour
         
         HoldTimer = KeyRepeatDelay;
     }
+    
+    #if UNITY_EDITOR
+    public void OnValidate()
+    {
+        if (KeyRepeatDelay < 0.0f)
+        {
+            Debug.LogWarning("Key repeat delay cannot be less than 0.0f. Set to 0.0f.", this);
+            KeyRepeatDelay = 0.0f;
+        }
+    }
+    #endif
+    #endregion
 
+    #region Public Methods
     public void KeyPress(string c)
     {
         InputField.AddCharacter(c);
@@ -108,15 +126,5 @@ public class VirtualKeyboard : MonoBehaviour
         HeldKey = KeyType.Backspace;
         HoldTimer = KeyRepeatDelay;
     }
-    
-    #if UNITY_EDITOR
-    public void OnValidate()
-    {
-        if (KeyRepeatDelay < 0.0f)
-        {
-            Debug.LogWarning("Key repeat delay cannot be less than 0.0f. Set to 0.0f.", this);
-            KeyRepeatDelay = 0.0f;
-        }
-    }
-#endif
+    #endregion
 }
