@@ -1,34 +1,58 @@
-using System;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MyInputField : InputField
 {
-    public override void OnSelect(BaseEventData eventData)
+    #region Variables
+    private bool m_IsDragging = false;
+    private int m_DragStartPosition;
+    #endregion
+    
+    #region Unity Methods
+    public override void OnBeginDrag(PointerEventData eventData)
     {
-        base.OnSelect(eventData);
-        MoveTextEnd(false);
+        base.OnBeginDrag(eventData);
+        m_IsDragging = true;
+        m_DragStartPosition = caretPosition;
     }
     
+    public override void OnEndDrag(PointerEventData eventData)
+    {
+        base.OnEndDrag(eventData);
+        m_IsDragging = false;
+    }
+
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        base.OnPointerDown(eventData);
+        m_DragStartPosition = caretPosition;
+    }
+
     public override void OnDeselect(BaseEventData eventData)
     {
     }
+    
+    private void Update()
+    {
+        MaintainFocus();
+    }
+    #endregion
 
-
+    
+    #region Public Methods
     public void AddCharacter(string character)
     {
         int insertPos = caretPosition;
-
-        // Check if any text is selected
-        if (caretPosition != caretSelectPositionInternal)
+        
+        if (caretPosition != m_DragStartPosition)
         {
-            // Delete the selected text first
-            int startPos = Mathf.Min(caretPosition, caretSelectPositionInternal);
-            int endPos = Mathf.Max(caretPosition, caretSelectPositionInternal);
+            int startPos = Mathf.Min(caretPosition, m_DragStartPosition);
+            int endPos = Mathf.Max(caretPosition, m_DragStartPosition);
+            
             string beforeText = text.Substring(0, startPos);
             string afterText = text.Substring(endPos);
+            
             text = beforeText + character + afterText;
             insertPos = startPos;
         }
@@ -36,35 +60,45 @@ public class MyInputField : InputField
         {
             string beforeText = text.Substring(0, caretPosition);
             string afterText = text.Substring(caretPosition);
+            
             text = beforeText + character + afterText;
         }
 
         ForceCaretPosition(insertPos + character.Length);
-        Debug.Log("After adding a letter index: " + caretPosition);
     }
     
     public void DeleteCharacter()
     {
-        Debug.Log("Before removing a letter index: " + caretPosition);
-        
-        if (caretPosition <= 0) return;
+        if (caretPosition != m_DragStartPosition)
+        {
+            int startPos = Mathf.Min(caretPosition, m_DragStartPosition);
+            int endPos = Mathf.Max(caretPosition, m_DragStartPosition);
+            
+            string beforeText = text.Substring(0, startPos);
+            string afterText = text.Substring(endPos);
+            
+            text = beforeText + afterText;
+            ForceCaretPosition(startPos);
+        }
+        else
+        {
+            if (caretPosition <= 0) return;
 
-        string beforeText = text.Substring(0, caretPosition - 1);
-        string afterText = text.Substring(caretPosition);
+            string beforeText = text.Substring(0, caretPosition - 1);
+            string afterText = text.Substring(caretPosition);
         
-        ForceCaretPosition(caretPosition - 1);
+            ForceCaretPosition(caretPosition - 1);
         
-        text = beforeText + afterText;
-
-        Debug.Log("After removing a letter index: " + caretPosition);
+            text = beforeText + afterText;
+        }
     }
+
 
     public void MoveCaretLeft()
     {
         if (caretPosition <= 0) return;
         
         ForceCaretPosition(caretPosition - 1);
-        Debug.Log("After moving caret left index: " + caretPosition);
     }
     
     public void MoveCaretRight()
@@ -72,7 +106,6 @@ public class MyInputField : InputField
         if (caretPosition >= text.Length) return;
 
         ForceCaretPosition(caretPosition + 1);
-        Debug.Log("After moving caret right index: " + caretPosition);
     }
 
     public void MaintainFocus()
@@ -80,21 +113,18 @@ public class MyInputField : InputField
         if (!isFocused)
         {
             ActivateInputField();
-            MoveTextEnd(false);
         }
     }
+    #endregion
 
-    private void Update()
-    {
-        MaintainFocus();
-    }
-
+    #region Private Methods
     private void ForceCaretPosition(int newPosition)
     {
         caretPosition = newPosition;
         caretSelectPositionInternal = caretPosition;
+        m_DragStartPosition = caretPosition;
         
-        // Try forcing the update
         UpdateLabel();
     }
+    #endregion
 }

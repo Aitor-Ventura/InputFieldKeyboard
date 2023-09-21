@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class VirtualKeyboard : MonoBehaviour {
-
-    public MyInputField InputField;
-
-    private enum KeyType
+public class VirtualKeyboard : MonoBehaviour 
+{
+    public enum KeyType
     {
         None,
         Character,
@@ -16,24 +11,51 @@ public class VirtualKeyboard : MonoBehaviour {
         Right,
         Backspace
     }
-
-    private KeyType heldKey = KeyType.None;
-    private string heldCharacter = "";
-    private float holdTimer = 0.0f;
-    private float keyRepeatDelay = 0.5f;
-    private float keyRepeatRate = 0.1f;
+    
+    public MyInputField InputField;
+    
+    [Tooltip("How long to wait before repeating a key press.")]
+    [SerializeField] private float m_KeyRepeatDelay = 0.5f;
+    
+    private KeyType m_HeldKey = KeyType.None;
+    private string m_HeldCharacter = "";
+    private float m_HoldTimer = 0.0f;
+    
+    public KeyType HeldKey
+    {
+        get => m_HeldKey;
+        set => m_HeldKey = value;
+    } 
+    
+    public string HeldCharacter
+    {
+        get => m_HeldCharacter;
+        set => m_HeldCharacter = value;
+    }
+    
+    public float HoldTimer
+    {
+        get => m_HoldTimer;
+        set => m_HoldTimer = value;
+    }
+    
+    public float KeyRepeatDelay
+    {
+        get => m_KeyRepeatDelay;
+        set => m_KeyRepeatDelay = value;
+    }
 
     private void Update()
     {
-        if (heldKey == KeyType.None) return;
+        if (HeldKey == KeyType.None) return;
         
-        holdTimer -= Time.deltaTime;
-        if (holdTimer > 0.0f) return;
+        HoldTimer -= Time.deltaTime;
+        if (HoldTimer > 0.0f) return;
 
-        switch (heldKey)
+        switch (HeldKey)
         {
             case KeyType.Character:
-                InputField.AddCharacter(heldCharacter);
+                InputField.AddCharacter(HeldCharacter);
                 break;
             case KeyType.Left:
                 InputField.MoveCaretLeft();
@@ -46,44 +68,55 @@ public class VirtualKeyboard : MonoBehaviour {
                 break;
         }
         
-        holdTimer = keyRepeatRate;
+        HoldTimer = KeyRepeatDelay;
     }
 
     public void KeyPress(string c)
     {
         InputField.AddCharacter(c);
         
-        heldKey = KeyType.Character;
-        heldCharacter = c;
-        holdTimer = keyRepeatDelay;
+        HeldKey = KeyType.Character;
+        HeldCharacter = c;
+        HoldTimer = KeyRepeatDelay;
     }
 
     public void KeyRelease()
     {
-        heldKey = KeyType.None;
+        HeldKey = KeyType.None;
     }
 
     public void KeyLeft()
     {
         InputField.MoveCaretLeft();
         
-        heldKey = KeyType.Left;
-        holdTimer = keyRepeatDelay;
+        HeldKey = KeyType.Left;
+        HoldTimer = KeyRepeatDelay;
     }
 
     public void KeyRight()
     {
         InputField.MoveCaretRight();
         
-        heldKey = KeyType.Right;
-        holdTimer = keyRepeatDelay;
+        HeldKey = KeyType.Right;
+        HoldTimer = KeyRepeatDelay;
     }
 
     public void KeyDelete()
     {
         InputField.DeleteCharacter();
         
-        heldKey = KeyType.Backspace;
-        holdTimer = keyRepeatDelay;
+        HeldKey = KeyType.Backspace;
+        HoldTimer = KeyRepeatDelay;
     }
+    
+    #if UNITY_EDITOR
+    public void OnValidate()
+    {
+        if (KeyRepeatDelay < 0.0f)
+        {
+            Debug.LogWarning("Key repeat delay cannot be less than 0.0f. Set to 0.0f.", this);
+            KeyRepeatDelay = 0.0f;
+        }
+    }
+#endif
 }
