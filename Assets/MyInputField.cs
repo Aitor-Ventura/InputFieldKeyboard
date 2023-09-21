@@ -1,28 +1,48 @@
+using System;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MyInputField : InputField
 {
-    protected override void Start()
+    public override void OnSelect(BaseEventData eventData)
     {
-        base.Start();
-        onEndEdit.AddListener(DeactivateEdit);
+        base.OnSelect(eventData);
+        MoveTextEnd(false);
     }
+    
+    public override void OnDeselect(BaseEventData eventData)
+    {
+    }
+
 
     public void AddCharacter(string character)
     {
-        
-        string beforeText = text.Substring(0, caretPosition);
-        string afterText = text.Substring(caretPosition);
-        text = beforeText + character + afterText;
+        int insertPos = caretPosition;
 
-        ForceCaretPosition(caretPosition + character.Length);
-        
+        // Check if any text is selected
+        if (caretPosition != caretSelectPositionInternal)
+        {
+            // Delete the selected text first
+            int startPos = Mathf.Min(caretPosition, caretSelectPositionInternal);
+            int endPos = Mathf.Max(caretPosition, caretSelectPositionInternal);
+            string beforeText = text.Substring(0, startPos);
+            string afterText = text.Substring(endPos);
+            text = beforeText + character + afterText;
+            insertPos = startPos;
+        }
+        else
+        {
+            string beforeText = text.Substring(0, caretPosition);
+            string afterText = text.Substring(caretPosition);
+            text = beforeText + character + afterText;
+        }
+
+        ForceCaretPosition(insertPos + character.Length);
         Debug.Log("After adding a letter index: " + caretPosition);
     }
-
-
+    
     public void DeleteCharacter()
     {
         Debug.Log("Before removing a letter index: " + caretPosition);
@@ -55,6 +75,20 @@ public class MyInputField : InputField
         Debug.Log("After moving caret right index: " + caretPosition);
     }
 
+    public void MaintainFocus()
+    {
+        if (!isFocused)
+        {
+            ActivateInputField();
+            MoveTextEnd(false);
+        }
+    }
+
+    private void Update()
+    {
+        MaintainFocus();
+    }
+
     private void ForceCaretPosition(int newPosition)
     {
         caretPosition = newPosition;
@@ -62,10 +96,5 @@ public class MyInputField : InputField
         
         // Try forcing the update
         UpdateLabel();
-    }
-
-    public void DeactivateEdit(string text)
-    {
-        DeactivateInputField();
     }
 }

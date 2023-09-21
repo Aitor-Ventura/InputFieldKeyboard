@@ -215,6 +215,7 @@ GameObject:
   - component: {fileID: 67808555}
   - component: {fileID: 67808554}
   - component: {fileID: 67808557}
+  - component: {fileID: 67808558}
   m_Layer: 0
   m_Name: ButtonA
   m_TagString: Untagged
@@ -369,6 +370,18 @@ MonoBehaviour:
             m_StringArgument: A
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &67808558
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67808552}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &185714981
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,6 +553,7 @@ GameObject:
   - component: {fileID: 296570970}
   - component: {fileID: 296570969}
   - component: {fileID: 296570972}
+  - component: {fileID: 296570973}
   m_Layer: 0
   m_Name: ButtonBackspace
   m_TagString: Untagged
@@ -694,6 +708,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &296570973
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 296570967}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &408779099
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,6 +812,7 @@ GameObject:
   - component: {fileID: 549934396}
   - component: {fileID: 549934395}
   - component: {fileID: 549934398}
+  - component: {fileID: 549934399}
   m_Layer: 0
   m_Name: ButtonB
   m_TagString: Untagged
@@ -940,6 +967,18 @@ MonoBehaviour:
             m_StringArgument: B
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &549934399
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549934393}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!850595691 &975001845
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1014,6 +1053,7 @@ GameObject:
   - component: {fileID: 1292237329}
   - component: {fileID: 1292237328}
   - component: {fileID: 1292237331}
+  - component: {fileID: 1292237332}
   m_Layer: 0
   m_Name: ButtonLeft
   m_TagString: Untagged
@@ -1168,6 +1208,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &1292237332
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292237326}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1309959182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,6 +1233,7 @@ GameObject:
   - component: {fileID: 1309959185}
   - component: {fileID: 1309959184}
   - component: {fileID: 1309959187}
+  - component: {fileID: 1309959188}
   m_Layer: 0
   m_Name: ButtonC
   m_TagString: Untagged
@@ -1335,6 +1388,18 @@ MonoBehaviour:
             m_StringArgument: C
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &1309959188
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309959182}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1312213760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1598,6 +1663,7 @@ GameObject:
   - component: {fileID: 1550262415}
   - component: {fileID: 1550262414}
   - component: {fileID: 1550262417}
+  - component: {fileID: 1550262418}
   m_Layer: 0
   m_Name: ButtonRight
   m_TagString: Untagged
@@ -1752,6 +1818,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!225 &1550262418
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1550262412}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1562917988
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,7 +2232,7 @@ MonoBehaviour:
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
   m_Text: 
-  m_CaretBlinkRate: 0.85
+  m_CaretBlinkRate: 1
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_ShouldActivateOnSelect: 1
