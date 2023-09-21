@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class VirtualKeyboard : MonoBehaviour 
 {
@@ -15,6 +17,9 @@ public class VirtualKeyboard : MonoBehaviour
     #region Variables
     public MyInputField InputField;
     
+    [Tooltip("Text object to display the current index of the caret.")]
+    [SerializeField] private Text caretIndexCaretIndexText;
+
     [Tooltip("How long to wait before repeating a key press.")]
     [SerializeField] private float m_KeyRepeatDelay = 0.5f;
     
@@ -24,6 +29,12 @@ public class VirtualKeyboard : MonoBehaviour
     #endregion
     
     #region Properties
+    public Text CaretIndexText
+    {
+        get => caretIndexCaretIndexText;
+        set => caretIndexCaretIndexText = value;
+    }
+    
     public KeyType HeldKey
     {
         get => m_HeldKey;
@@ -52,28 +63,8 @@ public class VirtualKeyboard : MonoBehaviour
     #region Unity Methods
     private void Update()
     {
-        if (HeldKey == KeyType.None) return;
-        
-        HoldTimer -= Time.deltaTime;
-        if (HoldTimer > 0.0f) return;
-
-        switch (HeldKey)
-        {
-            case KeyType.Character:
-                InputField.AddCharacter(HeldCharacter);
-                break;
-            case KeyType.Left:
-                InputField.MoveCaretLeft();
-                break;
-            case KeyType.Right:
-                InputField.MoveCaretRight();
-                break;
-            case KeyType.Backspace:
-                InputField.DeleteCharacter();
-                break;
-        }
-        
-        HoldTimer = KeyRepeatDelay;
+        CheckKeyPress();
+        DisplayCaretIndex();
     }
     
     #if UNITY_EDITOR
@@ -125,6 +116,43 @@ public class VirtualKeyboard : MonoBehaviour
         
         HeldKey = KeyType.Backspace;
         HoldTimer = KeyRepeatDelay;
+    }
+    #endregion
+    
+    #region Private Methods
+
+    private void CheckKeyPress()
+    {
+        if (HeldKey == KeyType.None) return;
+        
+        HoldTimer -= Time.deltaTime;
+        if (HoldTimer > 0.0f) return;
+
+        switch (HeldKey)
+        {
+            case KeyType.Character:
+                InputField.AddCharacter(HeldCharacter);
+                break;
+            case KeyType.Left:
+                InputField.MoveCaretLeft();
+                break;
+            case KeyType.Right:
+                InputField.MoveCaretRight();
+                break;
+            case KeyType.Backspace:
+                InputField.DeleteCharacter();
+                break;
+        }
+        
+        HoldTimer = KeyRepeatDelay;
+    }
+    
+    private void DisplayCaretIndex()
+    {
+        if (CaretIndexText == null) return;
+
+        CaretIndexText.text = $"Current Caret Index: {InputField.caretPosition} \n" +
+                              $"Caret Selection Index: {InputField.DragCaretSelectionPosition}";
     }
     #endregion
 }

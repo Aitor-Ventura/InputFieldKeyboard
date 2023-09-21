@@ -6,7 +6,7 @@ public class MyInputField : InputField
 {
     #region Variables
     private bool m_IsDragging = false;
-    private int m_DragStartCaretCaretPosition;
+    private int m_DragCaretSelectionSelectionPosition;
     #endregion
     
     #region Properties
@@ -16,10 +16,10 @@ public class MyInputField : InputField
         set => m_IsDragging = value;
     }
     
-    public int DragStartCaretPosition
+    public int DragCaretSelectionPosition
     {
-        get => m_DragStartCaretCaretPosition;
-        set => m_DragStartCaretCaretPosition = value;
+        get => m_DragCaretSelectionSelectionPosition;
+        set => m_DragCaretSelectionSelectionPosition = value;
     }
     #endregion
     
@@ -28,7 +28,7 @@ public class MyInputField : InputField
     {
         base.OnBeginDrag(eventData);
         IsDragging = true;
-        DragStartCaretPosition = caretPosition;
+        DragCaretSelectionPosition = caretPosition;
     }
     
     public override void OnEndDrag(PointerEventData eventData)
@@ -40,7 +40,7 @@ public class MyInputField : InputField
     public override void OnPointerDown(PointerEventData eventData)
     {
         base.OnPointerDown(eventData);
-        DragStartCaretPosition = caretPosition;
+        DragCaretSelectionPosition = caretPosition;
     }
 
     public override void OnDeselect(BaseEventData eventData)
@@ -58,22 +58,23 @@ public class MyInputField : InputField
     public void AddCharacter(string character)
     {
         int insertPos = caretPosition;
+        string beforeText, afterText;
         
-        if (caretPosition != DragStartCaretPosition)
+        if (caretPosition != DragCaretSelectionPosition)
         {
-            int startPos = Mathf.Min(caretPosition, DragStartCaretPosition);
-            int endPos = Mathf.Max(caretPosition, DragStartCaretPosition);
+            int startPosition = Mathf.Min(caretPosition, DragCaretSelectionPosition);
+            int endPosition = Mathf.Max(caretPosition, DragCaretSelectionPosition);
             
-            string beforeText = text.Substring(0, startPos);
-            string afterText = text.Substring(endPos);
+            beforeText = text.Substring(0, startPosition);
+            afterText = text.Substring(endPosition);
             
             text = beforeText + character + afterText;
-            insertPos = startPos;
+            insertPos = startPosition;
         }
         else
         {
-            string beforeText = text.Substring(0, caretPosition);
-            string afterText = text.Substring(caretPosition);
+            beforeText = text.Substring(0, caretPosition);
+            afterText = text.Substring(caretPosition);
             
             text = beforeText + character + afterText;
         }
@@ -83,23 +84,25 @@ public class MyInputField : InputField
     
     public void DeleteCharacter()
     {
-        if (caretPosition != m_DragStartCaretCaretPosition)
+        string beforeText, afterText;
+        
+        if (caretPosition != m_DragCaretSelectionSelectionPosition)
         {
-            int startPos = Mathf.Min(caretPosition, DragStartCaretPosition);
-            int endPos = Mathf.Max(caretPosition, DragStartCaretPosition);
+            int startPosition = Mathf.Min(caretPosition, DragCaretSelectionPosition);
+            int endPosition = Mathf.Max(caretPosition, DragCaretSelectionPosition);
             
-            string beforeText = text.Substring(0, startPos);
-            string afterText = text.Substring(endPos);
+            beforeText = text.Substring(0, startPosition);
+            afterText = text.Substring(endPosition);
             
             text = beforeText + afterText;
-            ForceCaretPosition(startPos);
+            ForceCaretPosition(startPosition);
         }
         else
         {
             if (caretPosition <= 0) return;
 
-            string beforeText = text.Substring(0, caretPosition - 1);
-            string afterText = text.Substring(caretPosition);
+            beforeText = text.Substring(0, caretPosition - 1);
+            afterText = text.Substring(caretPosition);
         
             ForceCaretPosition(caretPosition - 1);
         
@@ -135,7 +138,7 @@ public class MyInputField : InputField
     private void ForceCaretPosition(int newPosition)
     {
         caretPosition = newPosition;
-        DragStartCaretPosition = caretPosition;
+        DragCaretSelectionPosition = caretPosition;
         
         UpdateLabel();
     }
